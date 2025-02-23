@@ -1,10 +1,78 @@
 ﻿@attribute [Authorize]
-
 @page "/"
 @using Microsoft.AspNetCore.Authorization
 
-<PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+<PageTitle>Bienvenido a su Sistema</PageTitle>
+
+<div class="hero-section">
+    <div class="animated-bg" style="top: -250px; left: -250px;"></div>
+    <div class="animated-bg" style="bottom: -250px; right: -250px;"></div>
+    
+    <div class="container">
+        <div class="row align-items-center mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="welcome-text">¡Bienvenido a su Sistema!</h1>
+                <p class="subtitle">Una plataforma moderna para gestionar sus clientes y recursos de manera eficiente</p>
+                <a href="/Usuarios/usuarios" class="cta-button">
+                    <i class="bi bi-arrow-right-circle me-2"></i>
+                    Comenzar Ahora
+                </a>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <h3 class="feature-title">Gestión de Usuarios</h3>
+                    <p class="feature-text">Administre fácilmente sus clientes y mantenga su información organizada de manera eficiente.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-graph-up"></i>
+                    </div>
+                    <h3 class="feature-title">Analítica Avanzada</h3>
+                    <p class="feature-text">Obtenga información valiosa sobre sus operaciones con herramientas analíticas poderosas.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h3 class="feature-title">Seguridad Garantizada</h3>
+                    <p class="feature-text">Sus datos están protegidos con los más altos estándares de seguridad y encriptación.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="stat-item">
+                        <div class="stat-number">1,000+</div>
+                        <div class="stat-label">Clientes Satisfechos</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-item">
+                        <div class="stat-number">99.9%</div>
+                        <div class="stat-label">Tiempo de Actividad</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Soporte Técnico</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
