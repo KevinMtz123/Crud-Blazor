@@ -1,0 +1,192 @@
+﻿@page "/Usuarios/usuarios"
+@attribute [Authorize]
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Mvc
+@using System.Text.RegularExpressions
+@using PrubasBlazor.Data.Entities
+@using PrubasBlazor.Services
+@rendermode InteractiveServer
+@inject IUsuariosService UsuariosService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JS
+
+
+<div class="container-fluid mt-4">
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="card-title text-center p-3 fw-bold">CATÁLOGO DE CLIENTES</h2>
+            <hr>
+            <div class="input-group mb-3">
+
+                <a class="btn btn-success alert-success" href="Usuarios/addUsuario"><i class="bi bi-plus"></i></a>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Email</th>
+                            <th style="width: 12%;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var usuario in usuariosNew)
+                        {
+
+
+                            <tr>
+                                <td>@usuario.Id</td>
+                                <td class="ellipsis-text">@usuario.Name</td>
+                                <td class="ellipsis-text">@usuario.LastName</td>
+                                <td class="ellipsis-text">@usuario.Email</td>
+                                <td class="text-nowrap">
+                                    <button class="btn btn-secondary alert-secondary btn-sm rounded-pill ps-4 pe-4" @onclick="() => ViewDetails(usuario.Id)">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm rounded-pill ps-4 pe-4" @onclick="() => DeleteUsuario(usuario.Id)">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (selectedCliente != null)
+{
+    <div class="col-lg-6">
+        <!-- Detalle de Cliente -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title text-center p-3 fw-bold">DETALLE DE CLIENTE</h2>
+                <hr>
+                @currentFragment
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private (string?, string) message;
+    private string? fileError;
+    private string? errorMessage;
+    private bool isEditing = false;
+
+    private RenderFragment currentFragment => isEditing ? EditFragment : DisplayFragment;
+
+    private List<Usuario> usuariosNew = new();
+    private Usuario? selectedCliente;
+
+    protected override async Task OnInitializedAsync()
+    {
+        usuariosNew = await UsuariosService.GetUsuarios();
+    }
+
+    private async Task ViewDetails(int id)
+    {
+        selectedCliente = await UsuariosService.GetUsuarioById(id);
+
+    }
+    private async Task DeleteUsuario(int id)
+    {
+        bool confirmed = await JS.InvokeAsync<bool>("confirm", "Confirmar eliminar cliente");
+        if (confirmed)
+        {
+            await UsuariosService.DeleteUsuario(id);
+            usuariosNew = await UsuariosService.GetUsuarios();
+        }
+    }
+    private void EnableEditing()
+    {
+        isEditing = true;
+    }
+    private void CancelEdit()
+    {
+        isEditing = false;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            if (selectedCliente == null)
+            {
+                errorMessage = "No hay un cliente seleccionado.";
+                return;
+            }
+
+            await UsuariosService.UpdateUsuario(selectedCliente);
+
+            message = ("Cliente editado exitosamente", "success");
+            isEditing = false;
+        }
+        catch (InvalidOperationException ex)
+        {
+            errorMessage = ex.Message;
+        }
+    }
+    private RenderFragment DisplayFragment => @<div>
+        <button class="btn btn-secondary alert-secondary float-end rounded-pill ps-4 pe-4" @onclick="EnableEditing">Modificar</button>
+        <p><strong>Folio:</strong><br /> @selectedCliente?.Id</p>
+        <p><strong>Razón Social:</strong><br /> @selectedCliente?.LastName</p>
+        <p><strong>Razón Social:</strong><br /> @selectedCliente?.Name</p>
+        <p><strong>RFC:</strong><br /> @selectedCliente?.Email</p>
+        <p><strong>RFC:</strong><br /> @selectedCliente?.Phone</p>
+
+    </div>;
+
+    private RenderFragment EditFragment => @<div>
+        <button class="boton custom-button" @onclick="HandleValidSubmit">Guardar</button>
+        <button class="boton-red custom-button" @onclick="CancelEdit">Cancelar</button>
+
+        <div class="mb-3">
+            <label for="RFC"><strong>Name</strong></label>
+
+            <input id="RFC" class="form-control form-control-sm" @bind-value="selectedCliente.Name" />
+
+        </div>
+        <div class="mb-3">
+            <label for="RFC"><strong>Last Name</strong></label>
+
+            <input id="RFC" class="form-control form-control-sm" @bind-value="selectedCliente.LastName" />
+
+        </div>
+        <div class="mb-3">
+            <label for="RFC"><strong>Email</strong></label>
+
+            <input id="RFC" class="form-control form-control-sm" @bind-value="selectedCliente.Email" />
+
+        </div>
+        <div class="mb-3">
+            <label for="RFC"><strong>Address</strong></label>
+
+            <input id="RFC" class="form-control form-control-sm" @bind-value="selectedCliente.Address" />
+
+        </div>
+        <div class="mb-3">
+            <label for="RFC"><strong>Email</strong></label>
+
+            <input id="RFC" class="form-control form-control-sm" @bind-value="selectedCliente.Email" />
+
+        </div>
+        <div class="mb-3">
+            <label for="RFC"><strong>Phone</strong></label>
+
+            <input id="RFC" class="form-control form-control-sm" @bind-value="selectedCliente.Phone" />
+
+        </div>
+
+
+
+
+    </div>;
+}

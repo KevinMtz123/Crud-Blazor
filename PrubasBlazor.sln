@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35806.99 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrubasBlazor", "PrubasBlazor\PrubasBlazor\PrubasBlazor.csproj", "{1A96F9EA-6B0C-4B15-A8B6-8C4DE597F9F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrubasBlazor.Client", "PrubasBlazor\PrubasBlazor.Client\PrubasBlazor.Client.csproj", "{03D72B1C-C0B1-4EF8-837E-43E8D1C565B1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A96F9EA-6B0C-4B15-A8B6-8C4DE597F9F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A96F9EA-6B0C-4B15-A8B6-8C4DE597F9F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A96F9EA-6B0C-4B15-A8B6-8C4DE597F9F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A96F9EA-6B0C-4B15-A8B6-8C4DE597F9F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03D72B1C-C0B1-4EF8-837E-43E8D1C565B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03D72B1C-C0B1-4EF8-837E-43E8D1C565B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03D72B1C-C0B1-4EF8-837E-43E8D1C565B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03D72B1C-C0B1-4EF8-837E-43E8D1C565B1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D2D1C055-6542-4583-A826-786E8DED3F1C}
+	EndGlobalSection
+EndGlobal

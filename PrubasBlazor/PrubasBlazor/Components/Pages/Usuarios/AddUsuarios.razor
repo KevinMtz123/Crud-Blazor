@@ -1,0 +1,242 @@
+﻿@page "/Usuarios/addUsuario"
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Authorization
+@using PrubasBlazor.Data.Entities
+@using PrubasBlazor.Services
+@attribute [Authorize]
+@rendermode InteractiveServer
+@inject IUsuariosService UsuarioService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JS
+
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">
+        @errorMessage
+    </div>
+}
+
+<div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+        @*         <div class="col-3"></div>
+ *@        <div class="col-12 col-lg-6">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title text-center p-3 fw-bold">NUEVO USUARIO</h2>
+                    <hr>
+                    <EditForm Model="@newCliente" OnValidSubmit="HandleValidSubmit" FormName="AddUsuarioForm">
+                        <DataAnnotationsValidator />
+
+                        <div class="mb-3">
+                            <label class="label-bold" for="RazonSocial">Name</label>
+                            <InputText id="RazonSocial" @bind-Value="newCliente.Name" class="form-control" />
+                            <ValidationMessage For="() => newCliente.Name" class="text-danger" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="label-bold" for="rfc">Last Name</label>
+                            <InputText id="rfc" @bind-Value="newCliente.LastName" class="form-control"  />
+                            <ValidationMessage For="() => newCliente.LastName" class="text-danger" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="label-bold" for="rfc">Address</label>
+                            <InputText id="rfc" @bind-Value="newCliente.Address" class="form-control"  />
+                            <ValidationMessage For="() => newCliente.Address" class="text-danger" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="label-bold" for="rfc">Email</label>
+                            <InputText id="rfc" @bind-Value="newCliente.Email" class="form-control"  />
+                            <ValidationMessage For="() => newCliente.Email" class="text-danger" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="label-bold" for="rfc">Phone</label>
+                            <InputText id="rfc" @bind-Value="newCliente.Phone" class="form-control"  />
+                            <ValidationMessage For="() => newCliente.Phone" class="text-danger" />
+                        </div>
+                        
+                        <button type="submit" class="boton custom-button">Guardar</button>
+                        <a class="boton-red custom-button" href="Usuarios/usuarios">Cancelar</a>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private InputModel newCliente { get; set; } = new();
+    
+
+    private string? fileError;
+    private string? errorMessage;
+
+    private async Task HandleValidSubmit()
+    {
+        bool confirmed = await JS.InvokeAsync<bool>("confirm", "Se agregará este cliente");
+        if (confirmed)
+        {
+            try
+            {
+                Usuario usuario = new Usuario
+                    {
+                        Name = newCliente.Name,
+                        LastName = newCliente.LastName,
+                        Address = newCliente.Address,
+                        Email = newCliente.Email,
+                        Phone = newCliente.Phone,
+                       
+                    };
+
+                await UsuarioService.AddUsuario(usuario);
+                NavigationManager.NavigateTo("/Usuarios/usuarios");
+            }
+            catch (InvalidOperationException ex)
+            {
+                errorMessage = ex.Message;
+            }
+
+        }
+
+    }
+
+    private sealed class InputModel
+    {
+        [Required(ErrorMessage = "El nombre es requerido.")]
+        [Display(Name = "Nombre")]
+        public string Name { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "El Apellido es requerido.")]
+        [Display(Name = "Apellido")]
+        public string LastName { get; set; } = string.Empty;
+        
+        [Required(ErrorMessage = "El Apellido es requerido.")]
+        [Display(Name = "Apellido")]
+        public string Address { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "El Apellido es requerido.")]
+        [Display(Name = "Apellido")]
+        public string Email { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "El Apellido es requerido.")]
+        [Display(Name = "Apellido")]
+        public string Phone { get; set; } = string.Empty;
+
+    }
+}
+<style>
+    .mb-3 {
+        margin-bottom: .2rem !important;
+    }
+    /* Contenedor general del formulario */
+    .form-container {
+        padding: 20px; /* Espaciado interno */
+        border-radius: 8px; /* Bordes redondeados */
+        max-width: 500px; /* Ancho máximo */
+        margin: 20px auto; /* Centrado horizontal */
+    }
+
+    /* Cada grupo de formulario */
+    .form-group {
+        margin-bottom: 15px; /* Separación entre cada campo */
+    }
+
+        /* Etiquetas de los campos */
+        .form-group label {
+            display: block; /* Etiqueta en línea separada */
+            margin-bottom: 5px; /* Espacio debajo del label */
+        }
+
+    /* Estilo de los campos de entrada */
+    .form-control {
+        width: 100%; /* Abarca todo el ancho del contenedor */
+        padding: 2.5px; /* Espaciado interno */
+        border-radius: 6px; /* Bordes redondeados */
+        border: 1px solid #ced4da; /* Borde gris claro */
+        box-sizing: border-box; /* Incluye padding y borde */
+    }
+
+        .form-control:focus {
+            border-color: #80bdff; /* Borde azul en foco */
+            outline: none; /* Sin contorno adicional */
+            box-shadow: 0 0 5px rgba(128, 189, 255, 0.5); /* Sombra azul suave */
+        }
+
+    /* Título "Nueva Cotización" más pequeño */
+    .smaller-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* Negrita para los labels */
+    .label-bold {
+        font-weight: bold;
+    }
+
+    /* Cursiva para las opciones de los selects */
+    .italic-option {
+        font-style: italic;
+    }
+
+    .boton {
+        display: inline-block;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #FFF;
+        text-align: center;
+        text-decoration: none;
+        vertical-align: middle;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: .375rem .75rem !important;
+        font-size: 1rem;
+        border-radius: 16px !important;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        background-color: #003366;
+    }
+
+        .boton.boton-red,
+        .boton-red.custom-button,
+        .boton-red {
+            background-color: #DA5C56 !important;
+            color: #FFF;
+            border: 1px solid transparent;
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            border-radius: 16px;
+            display: inline-block;
+            font-weight: 400;
+            line-height: 1.5;
+            text-align: center;
+            text-decoration: none;
+            vertical-align: middle;
+            cursor: pointer;
+            transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        }
+
+            .btn.boton-red:hover,
+            .boton-red.custom-button:hover,
+            .boton-red:hover {
+                background-color: #c94f4a !important;
+            }
+
+    .btn-custom {
+        height: calc(1.2em + 0.75rem + 2px); /* Igual que InputSelect form-select-sm */
+        padding: 0.375rem 0.75rem; /* Ajustar el padding */
+        font-size: 0.875rem; /* Tamaño de fuente de form-select-sm */
+        line-height: 1.5; /* Línea de altura similar al InputSelect */
+        margin-left: 0.5rem; /* Espaciado entre el botón y el InputSelect */
+    }
+
+    .boton-custom {
+        height: calc(1.48em + 0.75rem + 2px); /* Igual que InputSelect form-select-sm */
+        padding: 0.375rem 0.75rem; /* Ajustar el padding */
+        font-size: 0.875rem; /* Tamaño de fuente de form-select-sm */
+        line-height: 1.5; /* Línea de altura similar al InputSelect */
+        margin-left: 0.5rem; /* Espaciado entre el botón y el InputSelect */
+    }
+</style>
